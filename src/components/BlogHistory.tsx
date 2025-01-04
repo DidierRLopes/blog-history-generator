@@ -77,15 +77,37 @@ export default function BlogHistory({ posts = [], static: isStatic = false, widt
     const showLabel = index % interval === 0;
 
     const postSizes = postsInMonth.reduce(
-      (acc: { [key: string]: number }, post, idx) => {
-        // Strip HTML tags and count words more accurately
-        const textContent = post.content_html.replace(/<[^>]*>/g, '');
-        const wordCount = textContent.trim().split(/\s+/).length;
-        acc[`post${idx + 1}`] = wordCount;
-        return acc;
-      },
-      {},
-    );
+        (acc: { [key: string]: number }, post, idx) => {
+          // Check if we're in a browser environment
+          if (typeof window !== 'undefined') {
+            // Use DOMParser in the browser
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(post.content_html, 'text/html');
+            
+            // Select all text nodes, excluding those within <code>, <pre>, and <img> tags
+            const textNodes = Array.from(doc.body.childNodes).filter(node => 
+              node.nodeType === Node.TEXT_NODE || 
+              (node.nodeType === Node.ELEMENT_NODE && 
+              !['CODE', 'PRE', 'IMG'].includes(node.nodeName))
+            );
+            
+            // Calculate the total length of text content
+            const textContent = textNodes.reduce((text, node) => 
+              text + (node.textContent || ''), ''
+            );
+            
+            // Store the size in KB
+            acc[`post${idx + 1}`] = textContent.length / 1024;
+          } else {
+            // Fallback for server-side rendering
+            // This is a simple approximation, you might want to use a more sophisticated method
+            const textContent = post.content_html.replace(/<[^>]*>/g, '');
+            acc[`post${idx + 1}`] = textContent.length / 1024;
+          }
+          return acc;
+        },
+        {},
+      );
 
     return {
       month: monthStart.toISOString().substring(0, 7),
