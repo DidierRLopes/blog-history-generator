@@ -58,4 +58,7 @@ You can manually trigger the generation workflow:
 
 Add this to your GitHub profile README or any other markdown file:
 
-[image](/output/blog-history.svg)
+
+# Latest run blog history
+
+![image](./output/blog-history.svg)
