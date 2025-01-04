@@ -57,3 +57,5 @@ You can manually trigger the generation workflow:
 ## Embedding
 
 Add this to your GitHub profile README or any other markdown file:
+
+[image](/output/blog-history.svg)
