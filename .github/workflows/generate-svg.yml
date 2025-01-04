@@ -2,11 +2,10 @@ name: Generate Blog History
 
 on:
   workflow_dispatch:  # Manual trigger
-  inputs:
-    blog_url:
-      description: 'Blog feed URL'
-      required: true
-      default: 'https://didierlopes.com/blog/feed.json'
+    inputs:
+        blog_url:
+        description: 'Blog feed URL'
+        required: true
 
 env:
   BLOG_URL: ${{ github.event.inputs.blog_url }}
