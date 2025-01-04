@@ -1,0 +1,33 @@
+name: Generate Blog History
+
+on:
+  workflow_dispatch:  # Manual trigger
+
+env:
+  BLOG_URL: 'https://didierlopes.com/blog/feed.json'  # Users can modify this line in their fork
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Install dependencies
+      run: npm install
+        
+    - name: Generate Blog History
+      run: npm run generate
+        
+    - name: Commit and Push
+      run: |
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
+        git add output/blog-history.svg
+        git commit -m "Update blog history visualization" || exit 0
+        git push
