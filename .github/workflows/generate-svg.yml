@@ -4,11 +4,8 @@ on:
   workflow_dispatch:  # Manual trigger
     inputs:
         blog_url:
-        description: 'Blog feed URL'
-        required: true
-
-env:
-  BLOG_URL: ${{ github.event.inputs.blog_url }}
+            description: 'Blog feed URL'
+            required: true
 
 jobs:
   generate:
@@ -27,6 +24,8 @@ jobs:
         
     - name: Generate Blog History
       run: npm run generate
+      env:
+        BLOG_URL: ${{ github.event.inputs.blog_url }}
         
     - name: Commit and Push
       run: |
