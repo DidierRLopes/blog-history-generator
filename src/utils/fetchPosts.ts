@@ -33,17 +33,34 @@ export async function fetchPosts(url: string): Promise<Post[]> {
             : []
       }));
     }
-    // If not Atom feed, assume JSON
-    const posts = response.data.items || response.data.posts || [];
     
-    return posts.map((post: any) => ({
-    id: post.id,
-    content_html: post.content_html || post.content,
-    url: post.url,
-    title: post.title,
-    summary: post.summary || post.excerpt,
-    date_modified: post.date_modified || post.date,
-    tags: post.tags || []
+    // JSON Feed parsing
+    const jsonData = JSON.parse(response.data);
+    if (jsonData.version && jsonData.version.startsWith('https://jsonfeed.org/version/')) {
+      const posts = jsonData.items || [];
+      
+      return posts.map((post: any) => ({
+        id: post.id,
+        content_html: post.content_html || '',
+        url: post.url,
+        title: post.title,
+        summary: post.summary || '',
+        date_modified: post.date_modified || post.date_published,
+        tags: post.tags || []
+      }));
+    }
+    
+    // Fallback for other JSON formats
+    const fallbackPosts = jsonData.items || jsonData.posts || [];
+    
+    return fallbackPosts.map((post: any) => ({
+      id: post.id,
+      content_html: post.content_html || post.content,
+      url: post.url,
+      title: post.title,
+      summary: post.summary || post.excerpt,
+      date_modified: post.date_modified || post.date,
+      tags: post.tags || []
     }));
   } catch (error) {
     console.error('Error fetching blog posts:', error);
