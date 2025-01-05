@@ -56,3 +56,13 @@ npm install
 ```
 npm run generate
 ```
+
+## Interactive
+
+If for some reason you want this widget to be interactive to be used on a website, you can check [this code](https://github.com/DidierRLopes/my-website/blob/main/src/components/BlogHistory.tsx).
+
+You can see how it looks on my personal website here: [didierlopes.com](https://didierlopes.com/)
+
+<img width="768" alt="Screenshot 2025-01-05 at 12 12 33 PM" src="https://github.com/user-attachments/assets/1d02c642-1c88-44c6-ad53-eba9bf9c1f6f" />
+
+
